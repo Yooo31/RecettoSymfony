@@ -44,6 +44,8 @@ class RecipeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $recipe->setUpdatedAt(new \DateTimeImmutable());
+
             $em->flush();
             $this->addFlash('success', 'Le recette a bien été modifiée');
 
@@ -79,5 +81,15 @@ class RecipeController extends AbstractController
         return $this->render('recipe/new.html.twig', [
             'form' => $form
         ]);
+    }
+
+    #[Route('/recipe/{id}', name:'recipe.delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    public function delete(Recipe $recipe, EntityManagerInterface $em): Response
+    {
+        $em->remove($recipe);
+        $em->flush();
+        $this->addFlash('success', 'La recette a bien été supprimée');
+
+        return $this->redirectToRoute('recipe.index');
     }
 }
