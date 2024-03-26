@@ -55,4 +55,29 @@ class RecipeController extends AbstractController
             'form' => $form
         ]);
     }
+
+    #[Route('recipe/new', name:'recipe.new')]
+    public function new(Request $request, EntityManagerInterface $em): Response
+    {
+        $recipe = new Recipe();
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $recipe->setCreatedAt(new \DateTimeImmutable());
+            $recipe->setUpdatedAt(new \DateTimeImmutable());
+
+            $em->persist($recipe);
+            $em->flush();
+            $this->addFlash('success', 'La recette a bien été créée');
+
+            return $this->redirectToRoute('recipe.show', ['slug' => $recipe->getSlug(), 'id' => $recipe->getId()]);
+        }
+
+        return $this->render('recipe/new.html.twig', [
+            'form' => $form
+        ]);
+    }
 }

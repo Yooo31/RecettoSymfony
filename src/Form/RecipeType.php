@@ -16,12 +16,6 @@ class RecipeType extends AbstractType
             ->add('title')
             ->add('slug')
             ->add('content')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updatedAt', null, [
-                'widget' => 'single_text',
-            ])
             ->add('duration')
             ->add('save', SubmitType::class, [
                 'label' => 'Envoyer'
