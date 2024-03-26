@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Édition : ' ~ recipe.title | upper %}
+
+{% block body %}
+  <h1>Édition de {{ recipe.title }}</h1>
+
+  {{ form(form) }}
+{% endblock %}
