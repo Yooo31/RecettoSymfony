@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Recipe;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,26 +18,32 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('slug')
             ->add('content')
             ->add('duration')
             ->add('save', SubmitType::class, [
                 'label' => 'Envoyer'
             ])
-            ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...))
+            ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimestampsAndSlug(...))
         ;
     }
 
-    public function autoSlug(PreSubmitEvent $event): void
+    public function attachTimestampsAndSlug(PostSubmitEvent $event): void
     {
         $data = $event->getData();
-
-        if (empty($data['slug'])) {
-            $slugger = new AsciiSlugger();
-            $data['slug'] = strtolower($slugger->slug($data['title']));
-
-            $event->setData($data);
+        if (!($data instanceof Recipe)) {
+            return;
         }
+
+        if (!$data->getId()) {
+            $data->setCreatedAt(new \DateTimeImmutable());
+        }
+
+        $data->setUpdatedAt(new \DateTimeImmutable());
+
+        $slugger = new AsciiSlugger();
+        $slug = strtolower($slugger->slug($data->getTitle()));
+
+        $data->setSlug($slug);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
