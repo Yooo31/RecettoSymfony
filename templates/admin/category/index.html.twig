@@ -1,0 +1,42 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block title "Toutes les catégories" %}
+
+{% block body %}
+    <h1>Toutes les catégories</h1>
+
+    <p>
+        <a href="{{ path('admin.category.new') }}" class="btn btn-primary">Ajouter une catégorie</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Catégories</th>
+                <th>Couleur</th>
+                <th style="width: 200px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>
+                        {{ category.name }}
+                    </td>
+                    <td>
+                        <span class="badge badge-pill" style="background-color: {{ category.color }}">{{ category.color }}</span>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-primary btn-sm" href="{{ path('admin.category.edit', {id: category.id}) }}">Modifier</a>
+                            <form action="{{ path('admin.category.delete', {id: category.id}) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

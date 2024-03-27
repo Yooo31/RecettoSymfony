@@ -5,5 +5,9 @@
 {% block body %}
   <h1>Édition de {{ recipe.title }}</h1>
 
-  {{ form(form) }}
+  {{ form_start(form) }}
+    <div hidden>
+      {{ form_row(form.slug) }}
+    </div>
+  {{ form_end(form) }}
 {% endblock %}
