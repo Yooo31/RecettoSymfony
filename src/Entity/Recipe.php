@@ -3,10 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\RecipeRepository;
+use App\Validator\BanWord;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
+#[UniqueEntity(fields: ['title'], message: 'Ce titre est déjà utilisé.')]
 class Recipe
 {
     #[ORM\Id]
@@ -15,13 +19,15 @@ class Recipe
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[Assert\Length(min: 5, max: 30, minMessage: 'Le titre doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le titre doit contenir au maximum {{ limit }} caractères.')]
+    #[BanWord()]
+    private string $title = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    private string $slug = '';
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    private string $content = '';
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -30,6 +36,7 @@ class Recipe
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive(message: 'La durée doit être un nombre positif.')]
     private ?int $duration = null;
 
     public function getId(): ?int
@@ -37,7 +44,7 @@ class Recipe
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -49,7 +56,7 @@ class Recipe
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -61,7 +68,7 @@ class Recipe
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
