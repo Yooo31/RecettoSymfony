@@ -7,6 +7,7 @@ use App\Validator\BanWord;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -20,6 +21,7 @@ class Category
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 3, max: 30, minMessage: 'Le nom doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le nom doit contenir au maximum {{ limit }} caractères.')]
     #[BanWord()]
+    #[Groups(['recipes.show'])]
     private ?string $name = '';
 
     #[ORM\Column(length: 255)]
