@@ -43,21 +43,24 @@ class RecipeRepository extends ServiceEntityRepository
     public function paginateRecipes(int $page): PaginationInterface
     {
         return $this->paginator->paginate(
-            $this->createQueryBuilder('r'),
+            $this->createQueryBuilder('r')
+                ->leftJoin('r.category', 'c')
+                ->select('r', 'c'),
             $page,
-            20
+            20,
+            [
+                'distinct' => true,
+                'defaultSortFieldName' => 'r.createdAt',
+                'defaultSortDirection' => 'DESC',
+                'defaultFilterFields' => [
+                    'r.title',
+                    'r.description',
+                    'c.id',
+                    'r.createdAt',
+                    'r.updatedAt',
+                ],
+            ]
         );
-        // return new Paginator($this
-        //         ->createQueryBuilder('r')
-        //         ->setFirstResult(($page - 1) * $limit)
-        //         ->setMaxResults($limit)
-        //         ->orderBy('r.createdAt', $order)
-        //         ->getQuery()
-        //         ->setHint(Paginator::HINT_ENABLE_DISTINCT, false),
-        //     false
-        // );
-
-
     }
 
     //    /**

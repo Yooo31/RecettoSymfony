@@ -12,14 +12,16 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Titre</th>
-                <th>Catégorie</th>
+                <th>{{ knp_pagination_sortable(recipes, 'ID', 'r.id') }}</th>
+                <th>{{ knp_pagination_sortable(recipes, 'Titre', 'r.title') }}</th>
+                <th>{{ knp_pagination_sortable(recipes, 'Catégorie', 'c.id') }}</th>
                 <th style="width: 200px">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for recipe in recipes %}
                 <tr>
+                    <td>{{ recipe.id }}</td>
                     <td>
                         <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}">{{ recipe.title }}</a>
                     </td>
