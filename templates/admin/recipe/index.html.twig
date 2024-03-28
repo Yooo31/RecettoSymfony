@@ -40,12 +40,5 @@
         </tbody>
     </table>
 
-    <div class="d-flex">
-        {% if page > 1 %}
-            <a href="{{ path('admin.recipe.index', {page: page - 1}) }}" class="btn btn-secondary">Précédent</a>
-        {% endif %}
-        {% if page < 1 %}
-            <a href="{{ path('admin.recipe.index', {page: page + 1}) }}" class="btn btn-secondary">Suivant</a>
-        {% endif %}
-    </div>
+    {{ knp_pagination_render(recipes) }}
 {% endblock %}

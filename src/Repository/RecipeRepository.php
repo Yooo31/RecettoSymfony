@@ -6,7 +6,8 @@ use App\Entity\Recipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Recipe>
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RecipeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private PaginatorInterface $paginator)
     {
         parent::__construct($registry, Recipe::class);
     }
@@ -39,17 +40,24 @@ class RecipeRepository extends ServiceEntityRepository
         ;
     }
 
-    public function paginateRecipes(int $page, int $limit, string $order): Paginator
+    public function paginateRecipes(int $page): PaginationInterface
     {
-        return new Paginator($this
-                ->createQueryBuilder('r')
-                ->setFirstResult(($page - 1) * $limit)
-                ->setMaxResults($limit)
-                ->orderBy('r.createdAt', $order)
-                ->getQuery()
-                ->setHint(Paginator::HINT_ENABLE_DISTINCT, false),
-            false
+        return $this->paginator->paginate(
+            $this->createQueryBuilder('r'),
+            $page,
+            20
         );
+        // return new Paginator($this
+        //         ->createQueryBuilder('r')
+        //         ->setFirstResult(($page - 1) * $limit)
+        //         ->setMaxResults($limit)
+        //         ->orderBy('r.createdAt', $order)
+        //         ->getQuery()
+        //         ->setHint(Paginator::HINT_ENABLE_DISTINCT, false),
+        //     false
+        // );
+
+
     }
 
     //    /**
