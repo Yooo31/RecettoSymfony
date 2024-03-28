@@ -14,6 +14,7 @@
             <tr>
                 <th>Catégories</th>
                 <th>Couleur</th>
+                <th>Nombre de recettes</th>
                 <th style="width: 200px">Actions</th>
             </tr>
         </thead>
@@ -25,6 +26,9 @@
                     </td>
                     <td>
                         <span class="badge badge-pill" style="background-color: {{ category.color }}">{{ category.color }}</span>
+                    </td>
+                    <td>
+                        {{ category.count }}
                     </td>
                     <td>
                         <div class="d-flex gap-1">
