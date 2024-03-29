@@ -14,6 +14,7 @@
             <tr>
                 <th></th>
                 <th>{{ knp_pagination_sortable(recipes, 'ID', 'r.id') }}</th>
+                <th>Créateur</th>
                 <th>{{ knp_pagination_sortable(recipes, 'Titre', 'r.title') }}</th>
                 <th>{{ knp_pagination_sortable(recipes, 'Catégorie', 'c.id') }}</th>
                 <th style="width: 200px">Actions</th>
@@ -24,6 +25,7 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ recipe.id }}</td>
+                    <td>{{ recipe.user.username | default('') }}</td>
                     <td>
                         <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}">{{ recipe.title }}</a>
                     </td>

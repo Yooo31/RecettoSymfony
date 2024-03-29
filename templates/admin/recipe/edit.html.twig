@@ -4,7 +4,8 @@
 
 {% block body %}
   <h1>Édition de {{ recipe.title }}</h1>
-
+  <span class="text-muted">Created by : {{ recipe.user.username | default('') }}</span>
+  <br />
   <img src="{{ vich_uploader_asset(recipe, 'thumbnailFile') }}" alt="{{ recipe.title }}">
 
   {{ form_start(form) }}
