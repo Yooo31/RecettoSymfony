@@ -6,8 +6,10 @@ use App\Entity\Recipe;
 use App\Form\RecipeType;
 use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
+use App\Security\Voter\RecipeVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,10 +21,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class RecipeController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(RecipeRepository $repository, Request $request): Response
+    #[IsGranted(RecipeVoter::LIST)]
+    public function index(RecipeRepository $repository, Request $request, Security $security): Response
     {
         $page = $request->query->getInt('page', 1);
-        $recipes = $repository->paginateRecipes($page);
+        $userId = $security->getUser()->getId();
+        $canListAll = $security->isGranted(RecipeVoter::LIST_ALL);
+        $recipes = $repository->paginateRecipes($page, $canListAll ? null : $userId);
 
         return $this->render('admin/recipe/index.html.twig', [
             'recipes' => $recipes,
@@ -31,6 +36,7 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/{id}', name:'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
+    #[IsGranted('RECIPE_EDIT', subject: 'recipe')]
     public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(RecipeType::class, $recipe);
@@ -71,6 +77,7 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/{id}', name:'delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
+    #[IsGranted('RECIPE_EDIT', subject: 'recipe')]
     public function delete(Recipe $recipe, EntityManagerInterface $em): Response
     {
         $em->remove($recipe);
