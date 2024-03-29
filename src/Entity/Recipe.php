@@ -26,15 +26,16 @@ class Recipe
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 5, max: 30, minMessage: 'Le titre doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le titre doit contenir au maximum {{ limit }} caractères.')]
     #[BanWord()]
-    #[Groups(['recipes.index'])]
+    #[Groups(['recipes.index', 'recipes.api.create'])]
     private string $title = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['recipes.index'])]
+    #[Assert\Length(min: 5, max: 30, minMessage: 'Le titre doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le titre doit contenir au maximum {{ limit }} caractères.')]
+    #[Groups(['recipes.index', 'recipes.api.create'])]
     private string $slug = '';
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['recipes.show'])]
+    #[Groups(['recipes.show', 'recipes.api.create'])]
     private string $content = '';
 
     #[ORM\Column]
@@ -47,7 +48,7 @@ class Recipe
 
     #[ORM\Column(nullable: true)]
     #[Assert\Positive(message: 'La durée doit être un nombre positif.')]
-    #[Groups(['recipes.index'])]
+    #[Groups(['recipes.index', 'recipes.api.create'])]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
