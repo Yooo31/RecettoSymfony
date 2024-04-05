@@ -36,7 +36,7 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name:'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name:'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
     #[IsGranted('RECIPE_EDIT', subject: 'recipe')]
     public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em): Response
     {
@@ -45,7 +45,7 @@ class RecipeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
-            $this->addFlash('success', 'Le recette a bien été modifiée');
+            $this->addFlash('success', 'La recette a bien été modifiée');
 
             return $this->redirectToRoute('admin.recipe.index', ['slug' => $recipe->getSlug(), 'id' => $recipe->getId()]);
         }
