@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\Quantity;
 use App\Entity\Recipe;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
+use App\Form\QuantityType;
 
 class RecipeType extends AbstractType
 {
@@ -42,11 +44,15 @@ class RecipeType extends AbstractType
             ])
             ->add('quantities', CollectionType::class, [
                 'entry_type' => QuantityType::class,
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
                 'attr' =>[
-                    'data-controller' => 'form-collection']
+                    // 'data-controller' => 'form-collection',
+                    'data-form-collection-add-label-value' => 'Ajouter un ingrédient',
+                    'data-form-collection-delete-label-value' => 'Supprimer l\'ingrédient',
+                    ]
                 ])
             ->add('save', SubmitType::class, [
                 'label' => 'Envoyer'

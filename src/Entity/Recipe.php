@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
-#[UniqueEntity(fields: ['title'], message: 'Ce titre est déjà utilisé.')]
+// #[UniqueEntity(fields: ['title'], message: 'Ce titre est déjà utilisé.')]
 #[Vich\Uploadable()]
 class Recipe
 {
@@ -68,6 +68,7 @@ class Recipe
     private ?User $user = null;
 
     #[ORM\OneToMany(targetEntity: Quantity::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist'])]
+    #[Assert\Valid()]
     private Collection $quantities;
 
     public function __construct()
