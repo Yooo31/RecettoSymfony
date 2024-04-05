@@ -4,7 +4,7 @@ namespace App\Message;
 
 final class RecipePDFMessage
 {
-    public function __construct(public readonly int $id)
+    public function __construct(public readonly int $id, public readonly string $slug)
     {
 
     }

@@ -20,7 +20,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/admin/recipe', name: 'admin.recipe.')]
-#[IsGranted('ROLE_VERIFIED')]
 class RecipeController extends AbstractController
 {
     #[Route('/', name: 'index')]
@@ -39,7 +38,6 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/{slug}', name:'show')]
-    #[IsGranted(RecipeVoter::LIST)]
     public function show(RecipeRepository $reposirory, Request $request): Response
     {
         $recipe = $reposirory->findOneBy(['slug' => $request->attributes->get('slug')]);
@@ -60,7 +58,7 @@ class RecipeController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'La recette a bien été modifiée');
 
-            $messageBus->dispatch(new RecipePDFMessage($recipe->getId()));
+            $messageBus->dispatch(new RecipePDFMessage($recipe->getId(), $recipe->getSlug()));
 
             return $this->redirectToRoute('admin.recipe.index', ['slug' => $recipe->getSlug(), 'id' => $recipe->getId()]);
         }
