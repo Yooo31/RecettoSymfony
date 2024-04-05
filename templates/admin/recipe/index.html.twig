@@ -27,7 +27,7 @@
                     <td>{{ recipe.id }}</td>
                     <td>{{ recipe.user.username | default('') }}</td>
                     <td>
-                        <a href="{{ path('admin.recipe.edit', {id: recipe.id}) }}">{{ recipe.title }}</a>
+                        <a href="{{ path('admin.recipe.show', {slug: recipe.slug}) }}">{{ recipe.title }}</a>
                     </td>
                     <td>
                         <span class="badge badge-pill" style="background-color: {{ recipe.category.color | default('#FFF') }}">{{ recipe.category.name | default('') }}</span>

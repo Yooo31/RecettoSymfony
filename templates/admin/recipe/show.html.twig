@@ -1,0 +1,15 @@
+{% extends "admin/admin.html.twig" %}
+
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="title">{{ recipe.title }}</h1>
+        <p>{{ recipe.slug }}</p>
+        <p>{{ recipe.content }}</p>
+        <p>{{ recipe.duration }}</p>
+        <p>{{ recipe.thumbnail }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

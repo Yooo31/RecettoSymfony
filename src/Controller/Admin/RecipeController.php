@@ -38,6 +38,17 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    #[Route('/{slug}', name:'show')]
+    #[IsGranted(RecipeVoter::LIST)]
+    public function show(RecipeRepository $reposirory, Request $request): Response
+    {
+        $recipe = $reposirory->findOneBy(['slug' => $request->attributes->get('slug')]);
+
+        return $this->render('admin/recipe/show.html.twig', [
+            'recipe' => $recipe
+        ]);
+    }
+
     #[Route('/edit/{id}', name:'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
     #[IsGranted('RECIPE_EDIT', subject: 'recipe')]
     public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em, MessageBusInterface $messageBus): Response
